@@ -135,7 +135,6 @@ fun DrawerContent(onItemClick: (Int) -> Unit) {
                 color = Color(0xFFEEEEEE),
                 shape = RoundedCornerShape(topEnd = 16.dp)
             ) // Custom drawer background
-
     ) {
         Column(
             modifier = Modifier
