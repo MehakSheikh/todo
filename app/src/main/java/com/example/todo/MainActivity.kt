@@ -4,12 +4,17 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.CheckCircle
@@ -33,6 +38,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.todo.ui.theme.ToDoTheme
@@ -62,22 +68,24 @@ fun MainScreen() {
             DrawerContent(onItemClick = { selectedItem = it; scope.launch { drawerState.close() } })
         },
         content = {
-            Scaffold(
-                bottomBar = {
-                    BottomNavigationBar(
-                        selectedItem = selectedItem,
-                        onItemSelected = { selectedItem = it },
-                        onHamburgerClick = { scope.launch { drawerState.open() } }  // Open drawer on hamburger click
+            Box(modifier = Modifier.fillMaxSize()) {
+                Scaffold(
+                    bottomBar = {
+                        BottomNavigationBar(
+                            selectedItem = selectedItem,
+                            onItemSelected = { selectedItem = it },
+                            onHamburgerClick = { scope.launch { drawerState.open() } }  // Open drawer on hamburger click
 
-                    )
-                }
-            ) {
-                // Show content based on selected item
-                when (selectedItem) {
-                    0 -> HamburgerContent()
-                    1 -> TasksContent()
-                    2 -> CalendarContent()
-                    3 -> MineContent()
+                        )
+                    }
+                ) {
+                    // Show content based on selected item
+                    when (selectedItem) {
+                        0 -> HamburgerContent()
+                        1 -> TasksContent()
+                        2 -> CalendarContent()
+                        3 -> MineContent()
+                    }
                 }
             }
         }
@@ -95,7 +103,7 @@ fun BottomNavigationBar(
         contentColor = MaterialTheme.colorScheme.onPrimary
     ) {
         NavigationBarItem(
-            selected = selectedItem == 1,
+            selected = selectedItem == 0,
             onClick = { onHamburgerClick() },  // Open the drawer on hamburger click
             icon = { Icon(Icons.Default.Menu, contentDescription = "Hamburger") }
         )
@@ -119,34 +127,48 @@ fun BottomNavigationBar(
 
 @Composable
 fun DrawerContent(onItemClick: (Int) -> Unit) {
-    Column(modifier = Modifier.padding(16.dp)) {
-        Text("Hamburger Menu", style = MaterialTheme.typography.headlineMedium)
-        Spacer(modifier = Modifier.height(16.dp))
-        // Add your menu items here
-        Text(
-            text = "Option 1",
+    Box(
+        modifier = Modifier
+            .fillMaxHeight()
+            .width(280.dp) // Adjust width to one-third of the screen (standard size)
+            .background(
+                color = Color(0xFFEEEEEE),
+                shape = RoundedCornerShape(topEnd = 16.dp)
+            ) // Custom drawer background
+
+    ) {
+        Column(
             modifier = Modifier
-                .clickable { onItemClick(0) }
-                .padding(8.dp)
-        )
-        Text(
-            text = "Option 2",
-            modifier = Modifier
-                .clickable { onItemClick(1) }
-                .padding(8.dp)
-        )
-        Text(
-            text = "Option 3",
-            modifier = Modifier
-                .clickable { onItemClick(2) }
-                .padding(8.dp)
-        )
-        Text(
-            text = "Option 4",
-            modifier = Modifier
-                .clickable { onItemClick(3) }
-                .padding(8.dp)
-        )
+                .padding(16.dp)
+        ) {
+            Text("Hamburger Menu", style = MaterialTheme.typography.headlineMedium)
+            Spacer(modifier = Modifier.height(16.dp))
+            // Add your menu items here
+            Text(
+                text = "Option 1",
+                modifier = Modifier
+                    .clickable { onItemClick(0) }
+                    .padding(8.dp)
+            )
+            Text(
+                text = "Option 2",
+                modifier = Modifier
+                    .clickable { onItemClick(1) }
+                    .padding(8.dp)
+            )
+            Text(
+                text = "Option 3",
+                modifier = Modifier
+                    .clickable { onItemClick(2) }
+                    .padding(8.dp)
+            )
+            Text(
+                text = "Option 4",
+                modifier = Modifier
+                    .clickable { onItemClick(3) }
+                    .padding(8.dp)
+            )
+        }
     }
 }
 
